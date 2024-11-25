@@ -8,11 +8,37 @@
 import SwiftUI
 
 struct ControllerClass: View {
+    @Binding var tasks: [Task]
+    @State var taskTitle: String = ""
+    @State var taskComplet : Bool = false
+    @Environment(\.dismiss) var dismiss
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack{
+            Form{
+                TextField("Enter task title", text:$taskTitle )
+                Toggle("Task Completed", isOn: $taskComplet)
+            }
+                .navigationBarTitle("Add Task")
+                .toolbar{
+                    ToolbarItem(placement: .navigationBarTrailing){
+                        Button("Save"){
+                            addTask()
+                            dismiss()
+                        }
+                    }
+                }
+        }
+        
+    }
+    
+    func addTask(){
+        let newTask = Task(title: taskTitle, isCompleted: taskComplet)
+        tasks.append(newTask)
+        
+        
     }
 }
 
 #Preview {
-    ControllerClass()
+    ControllerClass(tasks: .constant([]))
 }
